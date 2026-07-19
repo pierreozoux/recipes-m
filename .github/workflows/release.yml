@@ -14,6 +14,11 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     runs-on: ${{ matrix.os }}
+    # electron-builder uploads release assets via the REST API, which needs
+    # write access; the default GITHUB_TOKEN permissions for this repo are
+    # read-only, so it must be requested explicitly.
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
