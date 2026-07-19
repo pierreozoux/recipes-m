@@ -78,6 +78,16 @@ structure, then open the DB).
   as base64 data URLs via a tRPC query (`recipes.getImageDataUrl`), not
   `file://` URLs — those are unreliable to load from a renderer in both dev
   (Vite dev server origin) and prod without extra protocol wiring.
+- **An agent session cannot push git tags** (branch pushes work; tag pushes
+  403, confirmed by testing, likely deliberate since tags trigger public
+  releases). Don't retry — bump the version and push to `main` via
+  `scripts/release.sh`'s steps, then either ask a human to run the tag/push
+  part, or use the GitHub Actions API (`workflow_dispatch` on `main`) to
+  build without a tag. electron-builder resolves the release tag from
+  `package.json`'s version regardless of which ref triggered the build, so
+  `workflow_dispatch` still publishes to the right GitHub Release — but a
+  git tag matching that version won't exist until a human pushes it, so do
+  that after, don't leave it dangling.
 
 ## Commands
 
@@ -85,7 +95,9 @@ structure, then open the DB).
 (Playwright, drives the packaged app — build first) · `pnpm typecheck` ·
 `pnpm lint` · `pnpm gen:openapi` · `pnpm db:generate` (after editing
 `src/main/db/sqlite/schema.ts`, then add the generated file to
-`src/main/db/migrations/index.ts`).
+`src/main/db/migrations/index.ts`) · `pnpm release patch|minor|major`
+(see README "Cutting a release" — requires tag-push access, so a human
+must run it, not an agent).
 
 ## Conventions
 

@@ -116,6 +116,27 @@ unit test run. This is handled automatically by the npm scripts above.
 
 Pushing a `v*` tag runs `.github/workflows/release.yml`, which builds and
 publishes signed-if-configured installers for macOS, Windows, and Linux to
-a GitHub Release. Signing is optional — see the workflow for the secret
+a GitHub Release matching that tag (`electron-builder.yml` sets
+`publish.releaseType: release`, so it publishes directly rather than
+leaving a draft). Signing is optional — see the workflow for the secret
 names it reads (`MAC_CSC_LINK`, `WIN_CSC_LINK`, Apple notarization keys);
 without them, builds are produced unsigned.
+
+### Cutting a release
+
+Two things must stay in sync: `package.json`'s `"version"` (plain, e.g.
+`0.1.0`) and the git tag that triggers the build (`v`-prefixed, e.g.
+`v0.1.0`) — the tag must point at the exact commit you want built. Run:
+
+```sh
+pnpm release patch   # or: minor | major
+```
+
+This runs `scripts/release.sh`, which: checks the tree is clean and `main`
+is up to date with `origin/main`, runs `pnpm typecheck && pnpm test`, bumps
+`package.json`, commits `Release vX.Y.Z`, tags it, and pushes both — which
+triggers the release build. Must be run by a human with tag-push access;
+see `AGENTS.md` for why an agent session can't do this step itself.
+
+Next release: **`v0.1.1`** (patch — everything since `v0.1.0` has been
+CI/packaging fixes, not app changes).

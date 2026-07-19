@@ -26,7 +26,8 @@
     "build:unpack": "pnpm build && electron-builder --dir",
     "build:win": "pnpm build && electron-builder --win",
     "build:mac": "pnpm build && electron-builder --mac",
-    "build:linux": "pnpm build && electron-builder --linux"
+    "build:linux": "pnpm build && electron-builder --linux",
+    "release": "bash scripts/release.sh"
   },
   "dependencies": {
     "@blocknote/core": "^0.22.0",
