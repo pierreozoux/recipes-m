@@ -11,7 +11,16 @@ import { migrations } from '../migrations'
  * is a no-op.
  */
 export function runMigrations(db: Database.Database): void {
-  db.pragma('journal_mode = WAL')
+  try {
+    db.pragma('journal_mode = WAL')
+  } catch {
+    // WAL needs shared-memory (mmap) locking that some filesystems refuse —
+    // network drives, and notably folders synced by OneDrive/Dropbox, which
+    // is where Windows' default "Documents" location often lives. Fall back
+    // to the rollback journal, which works everywhere; this app is a single
+    // process per workspace, so WAL's concurrent-reader benefit doesn't matter.
+    db.pragma('journal_mode = DELETE')
+  }
   db.pragma('foreign_keys = ON')
 
   db.exec(`CREATE TABLE IF NOT EXISTS _migrations (

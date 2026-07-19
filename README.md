@@ -142,7 +142,23 @@ test`, then runs [`commit-and-tag-version`](https://github.com/absolute-version/
 which reads Conventional Commits since the last `v*` tag to infer the bump
 (`fix` → patch, `feat` → minor, a breaking change → major), updates
 `package.json`, prepends `CHANGELOG.md`, commits, and tags `vX.Y.Z` — then
-the script pushes both, which triggers the release build. Must be run by
-a human with tag-push access; see `AGENTS.md` for why an agent session
-can't do this step itself. If there are no commits since the last tag,
-the script refuses — there's nothing to release.
+the script pushes both. Pushing the tag is what triggers the release build
+(`.github/workflows/release.yml` on `tags: v*`).
+
+If there are no commits since the last tag, the script refuses — there's
+nothing to release.
+
+**Humans** with normal git push access: this is the whole process, nothing
+else to do.
+
+**Agent sessions**: the branch push succeeds but the tag push 403s (see
+`AGENTS.md`, "Key decisions & tradeoffs" — a deliberate restriction, not a
+bug or an outage). Don't re-run `pnpm release` to retry — the version bump,
+changelog, commit, and local tag already happened; re-running would bump
+the version again on top of an unreleased one. Instead, since the
+version-bump commit is already on `main`, trigger `release.yml` directly
+via `workflow_dispatch` (GitHub Actions API, ref `main`). electron-builder's
+GitHub publish step creates the release *and* the `vX.Y.Z` tag itself
+(via the REST API, not `git push`) the first time that version is
+published, so the tag ends up correctly pointing at the commit that was
+actually built.
