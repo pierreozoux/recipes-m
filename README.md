@@ -24,6 +24,36 @@ generated OpenAPI spec) on top of a swappable SQLite/Drizzle data layer.
 - **Keyboard shortcuts** everywhere, with a `?` cheat-sheet overlay and a
   `⌘K` command palette.
 
+## Install
+
+Download the installer for your OS from the
+[Releases page](https://github.com/pierreozoux/recipes-m/releases) (built by
+`.github/workflows/release.yml` whenever a `v*` tag is pushed):
+
+| Platform | File | Notes |
+|---|---|---|
+| Windows | `recipes-m-Setup-*.exe` | Unsigned by default — SmartScreen may warn; click "More info" → "Run anyway". |
+| macOS | `recipes-m-*.dmg` | Unsigned by default — right-click the app → "Open" the first time to bypass Gatekeeper. |
+| Linux | `recipes-m-*.AppImage` or `.deb` | Make the AppImage executable (`chmod +x`) before running, or install the `.deb` with your package manager. |
+
+Builds are unsigned unless the maintainer has configured signing secrets (see
+[Releases](#releases) below) — this is expected for a self-hosted project and
+doesn't affect functionality.
+
+## Quickstart
+
+1. Launch the app. On first run you'll be asked to **open** an existing
+   recipe folder or **create** a new one — pick any empty directory; it will
+   contain your `recipes.sqlite` database and an `images/` folder.
+2. Switch to **Ingredients** and add a few: name, unit (`kg`/`l`), price, and
+   an emoji icon. Every price edit is kept in history, never overwritten.
+3. Switch to **Recipes**, create one, and fill in the description/steps
+   (rich text) and the ingredient list — type to search, `Enter` to pick,
+   `Enter` again to add a quantity and start the next row.
+4. Everything autosaves as you type — there's no save button.
+5. Press `?` anytime for the full keyboard shortcut cheat sheet, or `⌘K`
+   (`Ctrl+K` on Windows/Linux) for the command palette.
+
 ## Architecture
 
 ```
