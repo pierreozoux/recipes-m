@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.5](https://github.com/pierreozoux/recipes-m/compare/v0.1.4...v0.1.5) (2026-07-19)
+
+### Features
+
+* **recipes:** create ingredients inline and show their unit ([a7e0738](https://github.com/pierreozoux/recipes-m/commit/a7e07383ab90f93a07db8b18d2ee54f64bc9bc98))
+
+### Bug Fixes
+
+* **ingredients:** allow the icon picker to load emoji data ([b8a608f](https://github.com/pierreozoux/recipes-m/commit/b8a608f3fe43110ed93f234e09873ae5a3f188ed))
 ## [0.1.4](https://github.com/pierreozoux/recipes-m/compare/v0.1.3...v0.1.4) (2026-07-19)
 
 ### Features
