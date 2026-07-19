@@ -38,10 +38,20 @@ jobs:
         run: pnpm build
 
       # Signing is optional: electron-builder skips it when these secrets
-      # are absent, producing an unsigned build instead of failing.
+      # are absent, producing an unsigned build instead of failing. GitHub
+      # Actions sets unset secrets to an empty string rather than omitting
+      # them, and electron-builder's macOS signing path (unlike Windows's)
+      # treats an empty CSC_LINK as "a certificate was requested" instead of
+      # "no certificate" — so empty vars must be unset before invoking it.
       - name: Publish (macOS)
         if: matrix.os == 'macos-latest'
-        run: pnpm exec electron-builder --mac --publish always
+        run: |
+          [ -z "$CSC_LINK" ] && unset CSC_LINK
+          [ -z "$CSC_KEY_PASSWORD" ] && unset CSC_KEY_PASSWORD
+          [ -z "$APPLE_API_KEY" ] && unset APPLE_API_KEY
+          [ -z "$APPLE_API_KEY_ID" ] && unset APPLE_API_KEY_ID
+          [ -z "$APPLE_API_ISSUER" ] && unset APPLE_API_ISSUER
+          pnpm exec electron-builder --mac --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
