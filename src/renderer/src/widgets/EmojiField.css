@@ -1,0 +1,32 @@
+.emoji-picker {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  height: 360px;
+}
+
+.emoji-picker-search {
+  margin: 8px;
+  padding: 6px 10px;
+  border-radius: var(--mantine-radius-sm);
+  border: 1px solid var(--mantine-color-default-border);
+  font-size: 14px;
+}
+
+.emoji-picker-viewport {
+  flex: 1;
+  overflow: auto;
+}
+
+.emoji-picker-list {
+  padding: 0 8px 8px;
+}
+
+.emoji-picker-loading,
+.emoji-picker-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--mantine-color-dimmed);
+}

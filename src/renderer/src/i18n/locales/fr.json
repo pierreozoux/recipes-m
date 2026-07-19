@@ -1,0 +1,98 @@
+{
+  "app": {
+    "name": "recipes-m"
+  },
+  "common": {
+    "search": "Rechercher",
+    "new": "Nouveau",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Enregistré",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "loading": "Chargement…",
+    "empty": "Rien pour l'instant",
+    "language": "Langue",
+    "unknownError": "Une erreur est survenue"
+  },
+  "nav": {
+    "recipes": "Recettes",
+    "ingredients": "Ingrédients",
+    "commandPalette": "Palette de commandes"
+  },
+  "workspace": {
+    "title": "recipes-m",
+    "subtitle": "Choisissez où vivent vos recettes",
+    "open": "Ouvrir un dossier de recettes",
+    "openHint": "Choisir un dossier existant contenant une base de recettes",
+    "create": "Créer un dossier de recettes",
+    "createHint": "Choisir ou créer un nouveau dossier vide",
+    "recents": "Dossiers récents",
+    "noRecents": "Aucun dossier récent",
+    "changeFolder": "Changer de dossier de recettes",
+    "openError": "Impossible d'ouvrir ce dossier"
+  },
+  "shortcuts": {
+    "title": "Raccourcis clavier",
+    "close": "Fermer",
+    "global": "Général",
+    "list": "Listes",
+    "recipeForm": "Ingrédients de la recette",
+    "openPalette": "Ouvrir la palette de commandes",
+    "showShortcuts": "Afficher cette liste",
+    "goToRecipes": "Aller aux recettes",
+    "goToIngredients": "Aller aux ingrédients",
+    "focusSearch": "Focus sur la recherche",
+    "navigate": "Déplacer la sélection",
+    "openItem": "Ouvrir l'élément sélectionné",
+    "createNew": "Créer un nouveau",
+    "deleteItem": "Supprimer l'élément sélectionné",
+    "addIngredientRow": "Ajouter une ligne d'ingrédient",
+    "deleteEmptyRow": "Supprimer la ligne (si vide)",
+    "moveToQuantity": "Aller au champ quantité"
+  },
+  "ingredient": {
+    "singular": "Ingrédient",
+    "plural": "Ingrédients",
+    "name": "Nom",
+    "unit": "Unité",
+    "unitKg": "par kg",
+    "unitL": "par litre",
+    "icon": "Icône",
+    "price": "Prix",
+    "currentPrice": "Prix actuel",
+    "priceHistory": "Historique des prix",
+    "noPriceYet": "Aucun prix enregistré",
+    "addPrice": "Enregistrer un nouveau prix",
+    "newPricePlaceholder": "Nouveau prix",
+    "deleteConfirmTitle": "Supprimer cet ingrédient ?",
+    "deleteConfirmBody": "Cette action est irréversible. Les recettes qui l'utilisent garderont la référence mais il disparaîtra de la liste.",
+    "createTitle": "Nouvel ingrédient",
+    "searchPlaceholder": "Rechercher un ingrédient…"
+  },
+  "recipe": {
+    "singular": "Recette",
+    "plural": "Recettes",
+    "name": "Nom",
+    "namePlaceholder": "Nom de la recette",
+    "description": "Description",
+    "steps": "Étapes",
+    "image": "Image",
+    "changeImage": "Changer l'image",
+    "removeImage": "Retirer l'image",
+    "ingredients": "Ingrédients",
+    "quantityPerPerson": "Qté / personne",
+    "addIngredient": "Ajouter un ingrédient",
+    "searchIngredientPlaceholder": "Tapez un ingrédient…",
+    "noIngredients": "Aucun ingrédient pour l'instant — commencez à taper ci-dessous",
+    "deleteConfirmTitle": "Supprimer cette recette ?",
+    "deleteConfirmBody": "Cette action est irréversible.",
+    "createTitle": "Nouvelle recette",
+    "searchPlaceholder": "Rechercher une recette…"
+  },
+  "validation": {
+    "required": "Ce champ est requis"
+  }
+}
