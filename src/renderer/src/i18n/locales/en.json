@@ -1,0 +1,98 @@
+{
+  "app": {
+    "name": "recipes-m"
+  },
+  "common": {
+    "search": "Search",
+    "new": "New",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "back": "Back",
+    "loading": "Loading…",
+    "empty": "Nothing here yet",
+    "language": "Language",
+    "unknownError": "Something went wrong"
+  },
+  "nav": {
+    "recipes": "Recipes",
+    "ingredients": "Ingredients",
+    "commandPalette": "Command palette"
+  },
+  "workspace": {
+    "title": "recipes-m",
+    "subtitle": "Choose where your recipes live",
+    "open": "Open recipe folder",
+    "openHint": "Pick an existing folder with a recipe database",
+    "create": "Create recipe folder",
+    "createHint": "Pick or make a new empty folder",
+    "recents": "Recent folders",
+    "noRecents": "No recent folders yet",
+    "changeFolder": "Change recipe folder",
+    "openError": "Couldn't open this folder"
+  },
+  "shortcuts": {
+    "title": "Keyboard shortcuts",
+    "close": "Close",
+    "global": "Global",
+    "list": "Lists",
+    "recipeForm": "Recipe ingredients",
+    "openPalette": "Open command palette",
+    "showShortcuts": "Show this list",
+    "goToRecipes": "Go to Recipes",
+    "goToIngredients": "Go to Ingredients",
+    "focusSearch": "Focus search",
+    "navigate": "Move selection",
+    "openItem": "Open selected item",
+    "createNew": "Create new",
+    "deleteItem": "Delete selected item",
+    "addIngredientRow": "Add ingredient row",
+    "deleteEmptyRow": "Delete row (when empty)",
+    "moveToQuantity": "Move to quantity field"
+  },
+  "ingredient": {
+    "singular": "Ingredient",
+    "plural": "Ingredients",
+    "name": "Name",
+    "unit": "Unit",
+    "unitKg": "per kg",
+    "unitL": "per liter",
+    "icon": "Icon",
+    "price": "Price",
+    "currentPrice": "Current price",
+    "priceHistory": "Price history",
+    "noPriceYet": "No price recorded yet",
+    "addPrice": "Record new price",
+    "newPricePlaceholder": "New price",
+    "deleteConfirmTitle": "Delete this ingredient?",
+    "deleteConfirmBody": "This can't be undone. Recipes using it will keep the reference but it will disappear from the list.",
+    "createTitle": "New ingredient",
+    "searchPlaceholder": "Search ingredients…"
+  },
+  "recipe": {
+    "singular": "Recipe",
+    "plural": "Recipes",
+    "name": "Name",
+    "namePlaceholder": "Recipe name",
+    "description": "Description",
+    "steps": "Steps",
+    "image": "Image",
+    "changeImage": "Change image",
+    "removeImage": "Remove image",
+    "ingredients": "Ingredients",
+    "quantityPerPerson": "Qty / person",
+    "addIngredient": "Add an ingredient",
+    "searchIngredientPlaceholder": "Type an ingredient…",
+    "noIngredients": "No ingredients yet — start typing below",
+    "deleteConfirmTitle": "Delete this recipe?",
+    "deleteConfirmBody": "This can't be undone.",
+    "createTitle": "New recipe",
+    "searchPlaceholder": "Search recipes…"
+  },
+  "validation": {
+    "required": "This field is required"
+  }
+}

@@ -1,0 +1,19 @@
+node_modules/
+out/
+dist/
+release/
+build/Output
+*.log
+.DS_Store
+.env
+.env.*
+openapi.json
+test-results/
+playwright-report/
+e2e/.workspaces/
+*.tsbuildinfo
+
+# Local-only mirror config for sandboxed dev environments where
+# github.com direct downloads are blocked; not needed on a normal
+# machine or in GitHub Actions (which can reach github.com directly).
+.npmrc
