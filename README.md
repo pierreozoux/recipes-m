@@ -122,21 +122,27 @@ leaving a draft). Signing is optional — see the workflow for the secret
 names it reads (`MAC_CSC_LINK`, `WIN_CSC_LINK`, Apple notarization keys);
 without them, builds are produced unsigned.
 
+### Commit messages
+
+This repo uses [Conventional Commits](https://www.conventionalcommits.org/)
+(`feat:`, `fix:`, `chore:`, `docs:`, etc., with `!` or a `BREAKING CHANGE:`
+footer for breaking changes). This isn't just style — the release process
+below parses commit history to decide the next version and to write the
+changelog, so it only works if commits follow the convention.
+
 ### Cutting a release
 
-Two things must stay in sync: `package.json`'s `"version"` (plain, e.g.
-`0.1.0`) and the git tag that triggers the build (`v`-prefixed, e.g.
-`v0.1.0`) — the tag must point at the exact commit you want built. Run:
-
 ```sh
-pnpm release patch   # or: minor | major
+pnpm release
 ```
 
-This runs `scripts/release.sh`, which: checks the tree is clean and `main`
-is up to date with `origin/main`, runs `pnpm typecheck && pnpm test`, bumps
-`package.json`, commits `Release vX.Y.Z`, tags it, and pushes both — which
-triggers the release build. Must be run by a human with tag-push access;
-see `AGENTS.md` for why an agent session can't do this step itself.
-
-Next release: **`v0.1.1`** (patch — everything since `v0.1.0` has been
-CI/packaging fixes, not app changes).
+No version number to pick. `scripts/release.sh` checks the tree is clean
+and `main` is up to date with `origin/main`, runs `pnpm typecheck && pnpm
+test`, then runs [`commit-and-tag-version`](https://github.com/absolute-version/commit-and-tag-version),
+which reads Conventional Commits since the last `v*` tag to infer the bump
+(`fix` → patch, `feat` → minor, a breaking change → major), updates
+`package.json`, prepends `CHANGELOG.md`, commits, and tags `vX.Y.Z` — then
+the script pushes both, which triggers the release build. Must be run by
+a human with tag-push access; see `AGENTS.md` for why an agent session
+can't do this step itself. If there are no commits since the last tag,
+the script refuses — there's nothing to release.

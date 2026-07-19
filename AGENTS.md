@@ -78,16 +78,18 @@ structure, then open the DB).
   as base64 data URLs via a tRPC query (`recipes.getImageDataUrl`), not
   `file://` URLs — those are unreliable to load from a renderer in both dev
   (Vite dev server origin) and prod without extra protocol wiring.
-- **An agent session cannot push git tags** (branch pushes work; tag pushes
-  403, confirmed by testing, likely deliberate since tags trigger public
-  releases). Don't retry — bump the version and push to `main` via
-  `scripts/release.sh`'s steps, then either ask a human to run the tag/push
-  part, or use the GitHub Actions API (`workflow_dispatch` on `main`) to
-  build without a tag. electron-builder resolves the release tag from
-  `package.json`'s version regardless of which ref triggered the build, so
-  `workflow_dispatch` still publishes to the right GitHub Release — but a
-  git tag matching that version won't exist until a human pushes it, so do
-  that after, don't leave it dangling.
+- **An agent session cannot push git tags via `git push`** (branch pushes
+  work; `git push origin vX.Y.Z` 403s, confirmed by testing — reproduced
+  even when a `main` push succeeded seconds earlier in the same script run,
+  so it's a deliberate ref-level restriction, not a GitHub outage). Workaround
+  that doesn't need a human: push the version-bump commit to `main`, then
+  trigger `release.yml` via the GitHub Actions API (`workflow_dispatch` on
+  `main`). electron-builder's GitHub publish step creates the release *and*
+  the matching tag through the REST API (not `git push`) when neither exists
+  yet for that version — confirmed working, tag ends up correctly pointing
+  at the commit that was actually built. This only works the *first* time a
+  version is published (if a release for that tag already exists, publish
+  just uploads assets to it).
 
 ## Commands
 
@@ -95,12 +97,18 @@ structure, then open the DB).
 (Playwright, drives the packaged app — build first) · `pnpm typecheck` ·
 `pnpm lint` · `pnpm gen:openapi` · `pnpm db:generate` (after editing
 `src/main/db/sqlite/schema.ts`, then add the generated file to
-`src/main/db/migrations/index.ts`) · `pnpm release patch|minor|major`
-(see README "Cutting a release" — requires tag-push access, so a human
-must run it, not an agent).
+`src/main/db/migrations/index.ts`) · `pnpm release` (see README "Cutting a
+release" — infers the version bump from commit history, requires tag-push
+access, so a human must run it, not an agent — see workaround above).
 
 ## Conventions
 
+- **Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)**
+  (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`, `ci:`, with `!`
+  or a `BREAKING CHANGE:` footer for breaking changes). Not optional style —
+  `pnpm release` (`commit-and-tag-version`) parses this history to pick the
+  next version and write `CHANGELOG.md`. A non-conventional commit doesn't
+  break anything but won't show up in the changelog.
 - No comments unless they explain a non-obvious *why* (see examples above:
   ESM/CJS forcing, price tie-breaking, autosave tradeoff).
 - i18n: every user-facing string goes through `react-i18next`, keys added

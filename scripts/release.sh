@@ -1,16 +1,9 @@
 #!/usr/bin/env bash
-# Cuts a release: bumps package.json, commits, tags, and pushes.
-# See "Cutting a release" in README.md for the full explanation.
+# Cuts a release: infers the version bump from Conventional Commits since
+# the last tag (fix -> patch, feat -> minor, "BREAKING CHANGE"/"!" -> major
+# via commit-and-tag-version), updates CHANGELOG.md, commits, tags "vX.Y.Z",
+# and pushes. See "Cutting a release" in README.md.
 set -euo pipefail
-
-bump="${1:-}"
-case "$bump" in
-  patch|minor|major) ;;
-  *)
-    echo "Usage: $0 <patch|minor|major>" >&2
-    exit 1
-    ;;
-esac
 
 if [[ -n "$(git status --porcelain)" ]]; then
   echo "Working tree is not clean. Commit or stash changes first." >&2
@@ -29,22 +22,22 @@ if [[ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]]; then
   exit 1
 fi
 
+# commit-and-tag-version always proposes at least a patch bump, even with
+# zero commits since the last tag — that's not "nothing to release", so
+# guard for it ourselves.
+last_tag="$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || true)"
+if [[ -n "$last_tag" ]] && [[ "$(git rev-list "${last_tag}..HEAD" --count)" -eq 0 ]]; then
+  echo "No commits since ${last_tag}. Nothing to release." >&2
+  exit 1
+fi
+
 pnpm typecheck
 pnpm test
 
-# --no-git-tag-version: bump package.json only. We commit and tag
-# ourselves so the tag always gets the "v" prefix release.yml's trigger
-# (tags: ['v*']) requires, regardless of any local tag-version-prefix
-# config, and so the tag is guaranteed to point at the commit it
-# actually describes (see README - a prior release's tag drifted from
-# the commit that was actually built and published under it).
-pnpm version "$bump" --no-git-tag-version
+pnpm exec commit-and-tag-version
+
 new_version="$(node -p "require('./package.json').version")"
 tag="v${new_version}"
-
-git add package.json
-git commit -m "Release ${tag}"
-git tag -a "$tag" -m "$tag"
 
 git push origin main
 git push origin "$tag"

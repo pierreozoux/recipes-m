@@ -5,6 +5,10 @@
   "main": "./out/main/index.cjs",
   "author": "pierre@ozoux.net",
   "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pierreozoux/recipes-m.git"
+  },
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.33.0",
@@ -30,6 +34,7 @@
     "release": "bash scripts/release.sh"
   },
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^7.3.0",
     "@blocknote/core": "^0.22.0",
     "@blocknote/mantine": "^0.22.0",
     "@blocknote/react": "^0.22.0",
@@ -58,30 +63,30 @@
     "react-dom": "^18.3.1",
     "react-i18next": "^15.4.0",
     "react-router-dom": "^7.1.5",
-    "zod": "^3.24.1",
-    "@asteasolutions/zod-to-openapi": "^7.3.0"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-ts": "^3.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron/rebuild": "3.6.1",
     "@playwright/test": "^1.50.1",
-    "playwright": "^1.50.1",
     "@testing-library/react": "^16.2.0",
-    "jsdom": "^26.0.0",
     "@types/better-sqlite3": "^7.6.12",
     "@types/node": "^22.13.1",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
+    "commit-and-tag-version": "^13.0.0",
     "drizzle-kit": "^0.30.4",
     "electron": "^33.3.1",
     "electron-builder": "^25.1.8",
     "electron-vite": "^2.3.0",
     "eslint": "^9.19.0",
     "eslint-plugin-react-hooks": "^5.1.0",
-    "typescript": "^5.7.3",
+    "jsdom": "^26.0.0",
+    "playwright": "^1.50.1",
     "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
     "vite": "^5.4.14",
     "vitest": "^3.0.4"
   }
