@@ -50,3 +50,8 @@ appImage:
 npmRebuild: true
 publish:
   provider: github
+  # electron-builder defaults to creating/updating a *draft* release, which
+  # it refuses to do if a non-draft release for the tag already exists
+  # (e.g. created manually) — it silently skips every asset upload instead.
+  # We want tag pushes to publish directly, so target a real release.
+  releaseType: release
