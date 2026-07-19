@@ -90,6 +90,19 @@ structure, then open the DB).
   at the commit that was actually built. This only works the *first* time a
   version is published (if a release for that tag already exists, publish
   just uploads assets to it).
+- **macOS and Linux release builds are commented out** in
+  `.github/workflows/release.yml` (matrix entries + publish steps) — not
+  needed yet. `electron-builder.yml`'s `mac:`/`linux:` config is untouched
+  (still usable for local `pnpm build:mac`/`build:linux`); only CI publishing
+  is disabled. Uncomment the matrix entries and the two publish steps to
+  bring them back.
+- **Auto-update via `electron-updater`** (`src/main/updater.ts`), not a
+  custom update checker. It reads the `latest*.yml` manifest electron-builder
+  already writes when publishing (`publish.releaseType: release` in
+  `electron-builder.yml`) — no separate update-feed config needed. Only runs
+  when `app.isPackaged` (dev has no update feed and would just error);
+  wired to run once on startup and from Help → "Check for Updates…" in the
+  native menu (`src/main/menu.ts`).
 
 ## Commands
 

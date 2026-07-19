@@ -25,7 +25,8 @@ const STRINGS: Record<AppLocale, Record<string, string>> = {
     minimize: 'Minimize',
     close: 'Close',
     help: 'Help',
-    shortcuts: 'Keyboard Shortcuts'
+    shortcuts: 'Keyboard Shortcuts',
+    checkForUpdates: 'Check for Updates…'
   },
   fr: {
     file: 'Fichier',
@@ -49,19 +50,23 @@ const STRINGS: Record<AppLocale, Record<string, string>> = {
     minimize: 'Réduire',
     close: 'Fermer',
     help: 'Aide',
-    shortcuts: 'Raccourcis clavier'
+    shortcuts: 'Raccourcis clavier',
+    checkForUpdates: 'Vérifier les mises à jour…'
   }
 }
 
 let requestChangeFolder: (() => void) | null = null
 let requestShortcutsOverlay: (() => void) | null = null
+let requestCheckForUpdates: (() => void) | null = null
 
 export function setMenuActionHandlers(handlers: {
   onChangeFolder: () => void
   onShowShortcuts: () => void
+  onCheckForUpdates: () => void
 }): void {
   requestChangeFolder = handlers.onChangeFolder
   requestShortcutsOverlay = handlers.onShowShortcuts
+  requestCheckForUpdates = handlers.onCheckForUpdates
 }
 
 export function buildApplicationMenu(locale: AppLocale = 'en'): void {
@@ -137,6 +142,11 @@ export function buildApplicationMenu(locale: AppLocale = 'en'): void {
           label: t.shortcuts,
           accelerator: 'Shift+?',
           click: () => requestShortcutsOverlay?.()
+        },
+        { type: 'separator' },
+        {
+          label: t.checkForUpdates,
+          click: () => requestCheckForUpdates?.()
         }
       ]
     }

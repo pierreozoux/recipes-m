@@ -23,22 +23,25 @@ generated OpenAPI spec) on top of a swappable SQLite/Drizzle data layer.
 - **i18n**: English and French, including the native app menu.
 - **Keyboard shortcuts** everywhere, with a `?` cheat-sheet overlay and a
   `⌘K` command palette.
+- **Auto-update**: on launch (and via Help → "Check for Updates…"), the app
+  checks the latest GitHub Release and installs updates in the background.
 
 ## Install
 
-Download the installer for your OS from the
+Download the installer from the
 [Releases page](https://github.com/pierreozoux/recipes-m/releases) (built by
 `.github/workflows/release.yml` whenever a `v*` tag is pushed):
 
 | Platform | File | Notes |
 |---|---|---|
 | Windows | `recipes-m-Setup-*.exe` | Unsigned by default — SmartScreen may warn; click "More info" → "Run anyway". |
-| macOS | `recipes-m-*.dmg` | Unsigned by default — right-click the app → "Open" the first time to bypass Gatekeeper. |
-| Linux | `recipes-m-*.AppImage` or `.deb` | Make the AppImage executable (`chmod +x`) before running, or install the `.deb` with your package manager. |
 
-Builds are unsigned unless the maintainer has configured signing secrets (see
+Only Windows builds are published right now (macOS/Linux are commented out in
+`release.yml` — not needed yet, trivial to re-enable). Builds are unsigned
+unless the maintainer has configured signing secrets (see
 [Releases](#releases) below) — this is expected for a self-hosted project and
-doesn't affect functionality.
+doesn't affect functionality. Once installed, the app updates itself; there's
+no need to re-download future versions manually.
 
 ## Quickstart
 
@@ -115,12 +118,20 @@ unit test run. This is handled automatically by the npm scripts above.
 ## Releases
 
 Pushing a `v*` tag runs `.github/workflows/release.yml`, which builds and
-publishes signed-if-configured installers for macOS, Windows, and Linux to
-a GitHub Release matching that tag (`electron-builder.yml` sets
-`publish.releaseType: release`, so it publishes directly rather than
-leaving a draft). Signing is optional — see the workflow for the secret
-names it reads (`MAC_CSC_LINK`, `WIN_CSC_LINK`, Apple notarization keys);
+publishes a signed-if-configured Windows installer to a GitHub Release
+matching that tag (`electron-builder.yml` sets `publish.releaseType:
+release`, so it publishes directly rather than leaving a draft). macOS and
+Linux are commented out in the workflow's matrix and publish steps — not
+needed yet; uncomment them to bring those platforms back. Signing is
+optional — see the workflow for the secret names it reads (`WIN_CSC_LINK`
+for Windows, plus the unused-for-now `MAC_CSC_LINK`/Apple notarization keys);
 without them, builds are produced unsigned.
+
+Every published release also updates existing installs automatically:
+electron-builder writes a `latest.yml` manifest alongside the installer, and
+`electron-updater` (`src/main/updater.ts`) checks it on launch and via Help →
+"Check for Updates…", downloading and installing new versions in the
+background with a native notification when ready.
 
 ### Commit messages
 

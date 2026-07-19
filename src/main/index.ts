@@ -5,6 +5,7 @@ import { createIPCHandler } from 'electron-trpc/main'
 import { appRouter } from './trpc/router'
 import { WorkspaceManager } from './workspace/workspace'
 import { buildApplicationMenu, setMenuActionHandlers } from './menu'
+import { checkForUpdates } from './updater'
 
 const workspace = new WorkspaceManager()
 let mainWindow: BrowserWindow | null = null
@@ -69,10 +70,15 @@ if (!gotSingleInstanceLock) {
         workspace.close()
         mainWindow?.webContents.send('app:change-folder')
       },
-      onShowShortcuts: () => mainWindow?.webContents.send('app:show-shortcuts')
+      onShowShortcuts: () => mainWindow?.webContents.send('app:show-shortcuts'),
+      onCheckForUpdates: () => checkForUpdates()
     })
     buildApplicationMenu()
     createWindow()
+
+    // Auto-update only makes sense for a packaged, published build — in dev
+    // there's no update feed and electron-updater would just error.
+    if (app.isPackaged) checkForUpdates()
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow()
