@@ -11,7 +11,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        # macos-latest and ubuntu-latest are commented out for now — Windows
+        # is the only platform we're shipping until mac/linux builds are
+        # actually needed. The per-OS publish steps below are already
+        # gated by `if: matrix.os == ...`, so re-adding them here is enough
+        # to bring those platforms back.
+        os: [windows-latest] # , macos-latest, ubuntu-latest
 
     runs-on: ${{ matrix.os }}
     # electron-builder uploads release assets via the REST API, which needs
@@ -48,22 +53,22 @@ jobs:
       # them, and electron-builder's macOS signing path (unlike Windows's)
       # treats an empty CSC_LINK as "a certificate was requested" instead of
       # "no certificate" — so empty vars must be unset before invoking it.
-      - name: Publish (macOS)
-        if: matrix.os == 'macos-latest'
-        run: |
-          [ -z "$CSC_LINK" ] && unset CSC_LINK
-          [ -z "$CSC_KEY_PASSWORD" ] && unset CSC_KEY_PASSWORD
-          [ -z "$APPLE_API_KEY" ] && unset APPLE_API_KEY
-          [ -z "$APPLE_API_KEY_ID" ] && unset APPLE_API_KEY_ID
-          [ -z "$APPLE_API_ISSUER" ] && unset APPLE_API_ISSUER
-          pnpm exec electron-builder --mac --publish always
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
-          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
-          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+      # - name: Publish (macOS)
+      #   if: matrix.os == 'macos-latest'
+      #   run: |
+      #     [ -z "$CSC_LINK" ] && unset CSC_LINK
+      #     [ -z "$CSC_KEY_PASSWORD" ] && unset CSC_KEY_PASSWORD
+      #     [ -z "$APPLE_API_KEY" ] && unset APPLE_API_KEY
+      #     [ -z "$APPLE_API_KEY_ID" ] && unset APPLE_API_KEY_ID
+      #     [ -z "$APPLE_API_ISSUER" ] && unset APPLE_API_ISSUER
+      #     pnpm exec electron-builder --mac --publish always
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+      #     CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+      #     APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+      #     APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+      #     APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
 
       - name: Publish (Windows)
         if: matrix.os == 'windows-latest'
@@ -73,8 +78,8 @@ jobs:
           CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
 
-      - name: Publish (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: pnpm exec electron-builder --linux --publish always
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Publish (Linux)
+      #   if: matrix.os == 'ubuntu-latest'
+      #   run: pnpm exec electron-builder --linux --publish always
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
