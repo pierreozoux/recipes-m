@@ -1,8 +1,11 @@
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Combobox, Group, NumberInput, Paper, Text, TextInput, useCombobox } from '@mantine/core'
-import { IconSearch } from '@tabler/icons-react'
+import { IconPlus, IconSearch } from '@tabler/icons-react'
+import { trpc } from '../../api/trpc'
 import type { IngredientWithPrice } from '@shared/schemas/ingredient'
+
+const CREATE_OPTION_VALUE = '__create__'
 
 interface NewIngredientRowProps {
   allIngredients: IngredientWithPrice[]
@@ -17,6 +20,8 @@ interface NewIngredientRowProps {
  */
 export default function NewIngredientRow({ allIngredients, onCommit }: NewIngredientRowProps): JSX.Element {
   const { t } = useTranslation()
+  const utils = trpc.useUtils()
+  const createMutation = trpc.ingredients.create.useMutation()
   const [search, setSearch] = useState('')
   const [picked, setPicked] = useState<IngredientWithPrice | null>(null)
   const [quantity, setQuantity] = useState<number | ''>('')
@@ -27,14 +32,23 @@ export default function NewIngredientRow({ allIngredients, onCommit }: NewIngred
     onDropdownClose: () => combobox.resetSelectedOption()
   })
 
+  const trimmedSearch = search.trim()
   const filtered = allIngredients
     .filter((i) => i.name.toLowerCase().includes(search.toLowerCase()))
     .slice(0, 20)
+  const hasExactMatch = allIngredients.some((i) => i.name.toLowerCase() === trimmedSearch.toLowerCase())
+  const showCreateOption = trimmedSearch.length > 0 && !hasExactMatch
 
   function pick(ingredient: IngredientWithPrice): void {
     setPicked(ingredient)
     combobox.closeDropdown()
     requestAnimationFrame(() => quantityInputRef.current?.focus())
+  }
+
+  async function createAndPick(name: string): Promise<void> {
+    const created = await createMutation.mutateAsync({ name })
+    await utils.ingredients.list.invalidate()
+    pick(created)
   }
 
   function reset(): void {
@@ -80,6 +94,9 @@ export default function NewIngredientRow({ allIngredients, onCommit }: NewIngred
               }
             }}
           />
+          <Text size="sm" c="dimmed" w={20}>
+            {picked.unit}
+          </Text>
         </Group>
       </Paper>
     )
@@ -89,6 +106,10 @@ export default function NewIngredientRow({ allIngredients, onCommit }: NewIngred
     <Combobox
       store={combobox}
       onOptionSubmit={(id) => {
+        if (id === CREATE_OPTION_VALUE) {
+          createAndPick(trimmedSearch)
+          return
+        }
         const ingredient = filtered.find((i) => i.id === id)
         if (ingredient) pick(ingredient)
       }}
@@ -121,7 +142,7 @@ export default function NewIngredientRow({ allIngredients, onCommit }: NewIngred
           }}
         />
       </Combobox.Target>
-      <Combobox.Dropdown hidden={filtered.length === 0}>
+      <Combobox.Dropdown hidden={filtered.length === 0 && !showCreateOption}>
         <Combobox.Options>
           {filtered.map((ingredient) => (
             <Combobox.Option value={ingredient.id} key={ingredient.id}>
@@ -131,6 +152,14 @@ export default function NewIngredientRow({ allIngredients, onCommit }: NewIngred
               </Group>
             </Combobox.Option>
           ))}
+          {showCreateOption && (
+            <Combobox.Option value={CREATE_OPTION_VALUE}>
+              <Group gap="xs" wrap="nowrap">
+                <IconPlus size={16} />
+                <Text size="sm">{t('recipe.createIngredientOption', { name: trimmedSearch })}</Text>
+              </Group>
+            </Combobox.Option>
+          )}
         </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>

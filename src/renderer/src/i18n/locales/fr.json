@@ -86,6 +86,7 @@
     "quantityPerPerson": "Qté / personne",
     "addIngredient": "Ajouter un ingrédient",
     "searchIngredientPlaceholder": "Tapez un ingrédient…",
+    "createIngredientOption": "Créer « {{name}} »",
     "noIngredients": "Aucun ingrédient pour l'instant — commencez à taper ci-dessous",
     "deleteConfirmTitle": "Supprimer cette recette ?",
     "deleteConfirmBody": "Cette action est irréversible.",

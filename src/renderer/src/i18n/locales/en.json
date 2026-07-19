@@ -86,6 +86,7 @@
     "quantityPerPerson": "Qty / person",
     "addIngredient": "Add an ingredient",
     "searchIngredientPlaceholder": "Type an ingredient…",
+    "createIngredientOption": "Create \"{{name}}\"",
     "noIngredients": "No ingredients yet — start typing below",
     "deleteConfirmTitle": "Delete this recipe?",
     "deleteConfirmBody": "This can't be undone.",

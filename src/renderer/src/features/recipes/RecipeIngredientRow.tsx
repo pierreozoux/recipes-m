@@ -79,6 +79,9 @@ export default function RecipeIngredientRow({
           onChange={handleQuantityChange}
           onKeyDown={handleKeyDown}
         />
+        <Text size="sm" c="dimmed" w={20}>
+          {ingredient?.unit}
+        </Text>
         <ActionIcon color="red" variant="subtle" onClick={handleRemove} aria-label={t('common.delete')}>
           <IconTrash size={16} />
         </ActionIcon>
